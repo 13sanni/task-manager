@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     // File Layout
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
 
     // Environment Settings
-    "module": "nodenext", // This is good for using import/export
-    "target": "esnext", // Modern JavaScript target is fine
+    "module": "esnext", // This is good for using import/export
+    "target": "es2023", // Modern JavaScript target is fine
     "esModuleInterop": true, // Add this line to enable ES module interop
+    "types": ["node"],
+    "ignoreDeprecations": "6.0",
 
     // Other Outputs
     "sourceMap": true,
@@ -28,5 +30,12 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true
-  }
+  },
+    "exclude": [
+    "node_modules",
+    "dist",
+    "prisma",
+    "prisma.config.ts"
+  ]
+
 }
