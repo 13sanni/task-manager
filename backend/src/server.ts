@@ -16,6 +16,6 @@ async function connectToDatabase() {
 // Connect to the database in the background
 connectToDatabase();
 
-app.listen(port,()=>{
-    console.log ("Backend is running")
+app.listen(port, () => {
+  console.log("Backend is running")
 })
