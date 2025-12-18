@@ -39,18 +39,25 @@ export const loginUser = async (req: Request, res: Response) => {
   const result = loginUserSchema.safeParse(req.body);
 
   if (!result.success) {
+     const errors = z.treeifyError(result.error);
     return res.status(400).json({
       message: "Validation failed",
-      errors: result.error.flatten().fieldErrors,
+      errors,
     });
   }
+ try {
+    const { token, user } = await loginUserService(result.data);
 
-  try {
-    const data = await loginUserService(result.data);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // true in production
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
 
     return res.status(200).json({
       message: "Login successful",
-      ...data,
+      user,
     });
   } catch (error: any) {
     return res.status(401).json({
