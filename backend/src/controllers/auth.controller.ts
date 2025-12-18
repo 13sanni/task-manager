@@ -1,8 +1,8 @@
-import { AuthenticatedRequest } from "../middleware/auth.middleware.js";
+import type { AuthenticatedRequest } from "../middleware/auth.middleware.ts";
 import type{ Request,Response } from 'express';
 import { z } from "zod";
-import { registerUserSchema,loginUserSchema, updateProfileSchema } from "../dtos/auth.dto.ts";
-import { registerUserService,loginUserService ,updateProfileService} from '../services/auth.service.ts';
+import { registerUserSchema,loginUserSchema, updateProfileSchema,changePasswordSchema } from "../dtos/auth.dto.ts";
+import { registerUserService,loginUserService ,updateProfileService,changePasswordService,getProfileService} from '../services/auth.service.ts';
 
 
 export const registerUser =async (req: Request,res:Response)=>{
@@ -65,6 +65,34 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+
+
+export const getProfile = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const user = await getProfileService(req.user!.userId);
+
+    return res.status(200).json({
+      user,
+    });
+  } catch (error: any) {
+    return res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+
+
+
+
+
+
+
+
 export const updateProfile = async (
   req: AuthenticatedRequest,
   res: Response
@@ -88,6 +116,35 @@ export const updateProfile = async (
     return res.status(200).json({
       message: "Profile updated successfully",
       user,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+export const changePassword = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const result = changePasswordSchema.safeParse(req.body);
+if (!result.success) {
+    const errors = z.treeifyError(result.error);
+
+    return res.status(400).json({
+      message: "Validation failed",
+      errors,
+    });
+  }
+
+  try {
+    await changePasswordService(
+      req.user!.userId,
+      result.data
+    );
+
+    return res.status(200).json({
+      message: "Password changed successfully",
     });
   } catch (error: any) {
     return res.status(400).json({

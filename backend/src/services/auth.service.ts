@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import type { LoginUserDto, RegisterUserDto , UpdateProfileDto } from "../dtos/auth.dto.ts";
-import {findUserByEmail,createUser,updateUserProfile} from "../repositories/user.repository.ts";
-
+import type { LoginUserDto, RegisterUserDto , UpdateProfileDto ,ChangePasswordDto} from "../dtos/auth.dto.ts";
+import {findUserByEmail,createUser,updateUserProfile,updateUserPassword,findUserById} from "../repositories/user.repository.ts";
+import { prisma } from "../lib/prisma.ts";
 
 export const registerUserService = async (
   data: RegisterUserDto
@@ -68,6 +68,15 @@ export const loginUserService = async (data: LoginUserDto) => {
 
 
 
+export const getProfileService = async (userId: string) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
 
 
 
@@ -90,4 +99,38 @@ export const updateProfileService = async (
 
 return updateUserProfile(userId, cleanedData);
 
+};
+
+
+export const changePasswordService = async (
+  userId: string,
+  data: ChangePasswordDto
+) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      password: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const isMatch = await bcrypt.compare(
+    data.oldPassword,
+    user.password
+  );
+
+  if (!isMatch) {
+    throw new Error("Old password is incorrect");
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    data.newPassword,
+    10
+  );
+
+  await updateUserPassword(userId, hashedPassword);
 };
