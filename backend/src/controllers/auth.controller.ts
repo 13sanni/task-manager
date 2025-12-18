@@ -1,6 +1,8 @@
-import { Request, Response  } from "express";
+
+import type{ Request,Response } from 'express';
 import { z } from "zod";
-import { registerUserSchema } from "../dtos/auth.dto";
+import { registerUserSchema } from "../dtos/auth.dto.ts";
+
 
 export const registerUser = (req: Request,res:Response)=>{
     const result = registerUserSchema.safeParse(req.body)

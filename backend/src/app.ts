@@ -1,11 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import router from "./routes/testingRoute.ts";
+import testRouter from "./routes/testingRoute.ts";
+import authRouter from "./routes/auth.routes.ts";
 const app = express();
 
 /* middleware */
 app.use(express.json());
 /* route */
-app.use("/",router);
+app.use("/",testRouter);
+app.use("/auth",authRouter);
 
 export default app;
