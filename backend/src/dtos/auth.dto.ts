@@ -25,6 +25,19 @@ export const loginUserSchema = z.object({
 });
 
 
+export const updateProfileSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters")
+    .optional(),
+
+  email: z
+    .email("Invalid email address")
+    .optional(),
+});
+
+export type UpdateProfileDto = z.infer<typeof updateProfileSchema>;
 
 export type LoginUserDto = z.infer<typeof loginUserSchema>;
 

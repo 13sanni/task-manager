@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import type { LoginUserDto, RegisterUserDto } from "../dtos/auth.dto.ts";
-import {findUserByEmail,createUser,} from "../repositories/user.repository.ts";
+import type { LoginUserDto, RegisterUserDto , UpdateProfileDto } from "../dtos/auth.dto.ts";
+import {findUserByEmail,createUser,updateUserProfile} from "../repositories/user.repository.ts";
 
 
 export const registerUserService = async (
@@ -64,4 +64,30 @@ export const loginUserService = async (data: LoginUserDto) => {
       name: user.name,
     },
   };
+};
+
+
+
+
+
+
+export const updateProfileService = async (
+  userId: string,
+  data: UpdateProfileDto
+) => {
+  // Check email uniqueness (important!)
+  if (data.email) {
+    const existingUser = await findUserByEmail(data.email);
+
+    if (existingUser && existingUser.id !== userId) {
+      throw new Error("Email already in use");
+    }
+  }
+  const cleanedData = {
+  ...(data.name !== undefined && { name: data.name }),
+  ...(data.email !== undefined && { email: data.email }),
+};
+
+return updateUserProfile(userId, cleanedData);
+
 };

@@ -19,3 +19,18 @@ export const createUser = async (
     },
   });
 };
+export const updateUserProfile = async (
+  userId: string,
+  data: { name?: string; email?:string }
+) => {
+  return prisma.user.update({
+    where: { id: userId },
+    data,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+    },
+  });
+};

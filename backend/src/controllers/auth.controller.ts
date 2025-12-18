@@ -1,8 +1,8 @@
-
+import { AuthenticatedRequest } from "../middleware/auth.middleware.js";
 import type{ Request,Response } from 'express';
 import { z } from "zod";
-import { registerUserSchema,loginUserSchema } from "../dtos/auth.dto.ts";
-import { registerUserService,loginUserService } from '../services/auth.service.ts';
+import { registerUserSchema,loginUserSchema, updateProfileSchema } from "../dtos/auth.dto.ts";
+import { registerUserService,loginUserService ,updateProfileService} from '../services/auth.service.ts';
 
 
 export const registerUser =async (req: Request,res:Response)=>{
@@ -61,6 +61,36 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     return res.status(401).json({
+      message: error.message,
+    });
+  }
+};
+export const updateProfile = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  const result = updateProfileSchema.safeParse(req.body);
+ if (!result.success) {
+    const errors = z.treeifyError(result.error);
+
+    return res.status(400).json({
+      message: "Validation failed",
+      errors,
+    });
+  }
+
+  try {
+    const user = await updateProfileService(
+      req.user!.userId,
+      result.data
+    );
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
       message: error.message,
     });
   }
