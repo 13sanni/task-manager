@@ -1,8 +1,8 @@
 
 import type{ Request,Response } from 'express';
 import { z } from "zod";
-import { registerUserSchema } from "../dtos/auth.dto.ts";
-import { registerUserService } from '../services/auth.service.ts';
+import { registerUserSchema,loginUserSchema } from "../dtos/auth.dto.ts";
+import { registerUserService,loginUserService } from '../services/auth.service.ts';
 
 
 export const registerUser =async (req: Request,res:Response)=>{
@@ -27,6 +27,33 @@ export const registerUser =async (req: Request,res:Response)=>{
     });
   } catch (error: any) {
     return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+
+
+
+export const loginUser = async (req: Request, res: Response) => {
+  const result = loginUserSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      message: "Validation failed",
+      errors: result.error.flatten().fieldErrors,
+    });
+  }
+
+  try {
+    const data = await loginUserService(result.data);
+
+    return res.status(200).json({
+      message: "Login successful",
+      ...data,
+    });
+  } catch (error: any) {
+    return res.status(401).json({
       message: error.message,
     });
   }

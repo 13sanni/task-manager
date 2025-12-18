@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
-import type { RegisterUserDto } from "../dtos/auth.dto.ts";
-import {
-  findUserByEmail,
-  createUser,
-} from "../repositories/user.repository.ts";
+import jwt from "jsonwebtoken";
+import type { LoginUserDto, RegisterUserDto } from "../dtos/auth.dto.ts";
+import {findUserByEmail,createUser,} from "../repositories/user.repository.ts";
+
 
 export const registerUserService = async (
   data: RegisterUserDto
@@ -28,5 +27,41 @@ export const registerUserService = async (
     email: user.email,
     name: user.name,
     createdAt: user.createdAt,
+  };
+};
+
+
+
+
+const {sign} = jwt;
+export const loginUserService = async (data: LoginUserDto) => {
+  const { email, password } = data;
+
+  
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+
+  
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Invalid email or password");
+  }
+
+  //temp
+  const token = sign(
+    { userId: user.id },
+    process.env.JWT_SECRET || "dev_secret",
+    { expiresIn: "1d" }
+  );
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
   };
 };
