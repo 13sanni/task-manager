@@ -1,18 +1,9 @@
 import { z } from "zod";
+import { TaskStatus, TaskPriority } from "../../generated/prisma/enums.ts"
 
-export const taskStatusEnum = z.enum([
-  "ToDo",
-  "InProgress",
-  "Review",
-  "Completed",
-]);
+export const taskStatusEnum = z.nativeEnum(TaskStatus);
+export const taskPriorityEnum = z.nativeEnum(TaskPriority);
 
-export const taskPriorityEnum = z.enum([
-  "Low",
-  "Medium",
-  "High",
-  "Urgent",
-]);
 
 export const createTaskSchema = z.object({
   title: z.string().min(1).max(100),
