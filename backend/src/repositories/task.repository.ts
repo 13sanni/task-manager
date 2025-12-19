@@ -1,6 +1,6 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../lib/prisma.ts";
 import { TaskStatus, TaskPriority } from "../../generated/prisma/enums.ts";
-import { CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.js";
+import type{ CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.ts";
 
 //create task
 export const createTask = async (

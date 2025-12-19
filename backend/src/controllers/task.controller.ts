@@ -8,7 +8,7 @@ import {
   getMyCreatedTasksService,
   getMyOverdueTasksService,
 } from "../services/task.service.ts";
-import { AuthenticatedRequest } from "../middleware/auth.middleware.ts";
+import type{ AuthenticatedRequest } from "../middleware/auth.middleware.ts";
 import { z } from "zod";
 
 //

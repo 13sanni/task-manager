@@ -1,4 +1,4 @@
-import { CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.js";
+import type{ CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.ts";
 import {
   createTask, 
   findTaskById,
@@ -7,7 +7,7 @@ import {
   getTasksAssignedToUser,
   getTasksCreatedByUser,
   getOverdueTasks,
-} from "../repositories/task.repository.js";
+} from "../repositories/task.repository.ts";
 
 
  // Create a task
