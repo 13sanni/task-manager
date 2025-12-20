@@ -1,3 +1,5 @@
+import TasksPage from "../tasks/TasksPage";
+
 export default function Tasks() {
-  return <h1>Tasks (Protected)</h1>;
+  return <TasksPage />;
 }
