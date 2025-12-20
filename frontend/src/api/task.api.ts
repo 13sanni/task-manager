@@ -33,3 +33,17 @@ export const getOverdueTasksApi = async (): Promise<{
   const res = await axios.get("/tasks/overdue/me");
   return res.data;
 };
+export interface CreateTaskPayload {
+  title: string;
+  description?: string;
+  dueDate: string;
+  priority: string;
+  assignedToId: string;
+}
+
+export const createTaskApi = async (
+  data: CreateTaskPayload
+) => {
+  const res = await axios.post("/tasks", data);
+  return res.data;
+};

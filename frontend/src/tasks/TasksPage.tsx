@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTasks } from "./tasks.queries";
 import TaskFilters from "./TaskFilters";
 import TaskCard from "../dashboard/TaskCard";
+import CreateTaskForm from "./ui/CreateTaskForm";
 
 export default function TasksPage() {
   const [status, setStatus] = useState<string | undefined>();
@@ -17,6 +18,7 @@ export default function TasksPage() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
+<CreateTaskForm />
 
       <TaskFilters
         status={status}
