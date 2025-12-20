@@ -1,4 +1,5 @@
 import type{ CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.ts";
+import {NotFoundError,ForbiddenError,} from "../errors/httpErrors.ts";
 import {
   createTask, 
   findTaskById,
@@ -29,19 +30,19 @@ export const updateTaskService = async (
   const task = await findTaskById(taskId);
 
   if (!task) {
-    throw new Error("Task not found");
+    throw new NotFoundError("Task not found");
   }
 
-  // Only creator or assignee can update
   if (
     task.creatorId !== userId &&
     task.assignedToId !== userId
   ) {
-    throw new Error("Not authorized to update this task");
+    throw new ForbiddenError("Not authorized to update this task");
   }
 
   return updateTaskById(taskId, data);
 };
+;
 
 
 //  Delete a task
@@ -53,16 +54,16 @@ export const deleteTaskService = async (
   const task = await findTaskById(taskId);
 
   if (!task) {
-    throw new Error("Task not found");
+    throw new NotFoundError("Task not found");
   }
 
-  // Only creator can delete
   if (task.creatorId !== userId) {
-    throw new Error("Not authorized to delete this task");
+    throw new ForbiddenError("Not authorized to delete this task");
   }
 
   await deleteTaskById(taskId);
 };
+
 
 // Dashboard: tasks assigned to current user
 

@@ -1,4 +1,4 @@
-import type{ Request, Response } from "express";
+import type{ Request, Response , NextFunction } from "express";
 import {createTaskSchema,updateTaskSchema,} from "../dtos/task.dto.ts";
 import {
   createTaskService,
@@ -14,7 +14,8 @@ import { z } from "zod";
 //
 export const createTaskController = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+  next: NextFunction,
 ) => {
   const result = createTaskSchema.safeParse(req.body);
 
@@ -37,11 +38,9 @@ export const createTaskController = async (
       message: "Task created successfully",
       task,
     });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
+  } catch (error) {
+  next(error);
+}
 };
 
 
@@ -49,7 +48,8 @@ export const createTaskController = async (
  
 export const updateTaskController = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+  next:NextFunction,
 ) => {
   const { taskId } = req.params;
 
@@ -79,10 +79,9 @@ if (!taskId) {
       message: "Task updated successfully",
       task,
     });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
+  } catch (error) {
+  next(error);
+
   }
 };
 
@@ -91,7 +90,8 @@ if (!taskId) {
  
 export const deleteTaskController = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+  next:NextFunction,
 ) => {
   const { taskId } = req.params;
 if (!taskId) {
@@ -105,11 +105,9 @@ if (!taskId) {
     return res.status(200).json({
       message: "Task deleted successfully",
     });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
+  }catch (error) {
+  next(error);
+}
 };
 
 
@@ -117,7 +115,8 @@ if (!taskId) {
  
 export const getMyAssignedTasksController = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+
 ) => {
   const tasks = await getMyAssignedTasksService(req.user!.userId);
 

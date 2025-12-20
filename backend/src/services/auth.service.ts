@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {NotFoundError,UnauthorizedError,BadRequestError} from "../errors/httpErrors.ts";
 import type { LoginUserDto, RegisterUserDto , UpdateProfileDto ,ChangePasswordDto} from "../dtos/auth.dto.ts";
 import {findUserByEmail,createUser,updateUserProfile,updateUserPassword,findUserById} from "../repositories/user.repository.ts";
 import { prisma } from "../lib/prisma.ts";
@@ -11,10 +12,9 @@ export const registerUserService = async (
 
   
   const existingUser = await findUserByEmail(email);
-  if (existingUser) {
-    throw new Error("User already exists");
-  }
-
+ if (existingUser) {
+  throw new BadRequestError("User already exists");
+}
   
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -39,16 +39,16 @@ export const loginUserService = async (data: LoginUserDto) => {
 
   
   const user = await findUserByEmail(email);
-  if (!user) {
-    throw new Error("Invalid email or password");
-  }
+ if (!user) {
+  throw new UnauthorizedError("Invalid email or password");
+}
+
 
   
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    throw new Error("Invalid email or password");
-  }
-
+if (!isPasswordValid) {
+  throw new UnauthorizedError("Invalid email or password");
+}
   //temp
   const token = sign(
     { userId: user.id },

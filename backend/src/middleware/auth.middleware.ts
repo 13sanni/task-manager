@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
+import { UnauthorizedError } from "../errors/httpErrors.ts";
 interface JwtPayload {
   userId: string;
 }
@@ -15,24 +15,18 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const token = req.cookies?.token;
+if (!token) {
+  throw new UnauthorizedError("Authentication required");
+}
 
-  if (!token) {
-    return res.status(401).json({
-      message: "Authentication required",
-    });
-  }
+try {
+  const decoded = jwt.verify(
+    token,
+    process.env.JWT_SECRET as string
+  ) as JwtPayload;
 
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload;
-
-    req.user = decoded;
-    next();
-  } catch {
-    return res.status(401).json({
-      message: "Invalid or expired token",
-    });
-  }
-};
+  req.user = decoded;
+  next();
+} catch {
+  throw new UnauthorizedError("Invalid or expired token");
+}}

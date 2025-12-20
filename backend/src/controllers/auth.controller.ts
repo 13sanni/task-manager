@@ -1,11 +1,11 @@
 import type { AuthenticatedRequest } from "../middleware/auth.middleware.ts";
-import type{ Request,Response } from 'express';
+import type{ Request,Response,NextFunction } from 'express';
 import { z } from "zod";
 import { registerUserSchema,loginUserSchema, updateProfileSchema,changePasswordSchema } from "../dtos/auth.dto.ts";
 import { registerUserService,loginUserService ,updateProfileService,changePasswordService,getProfileService} from '../services/auth.service.ts';
 
 
-export const registerUser =async (req: Request,res:Response)=>{
+export const registerUser =async (req: Request,res:Response,next:NextFunction)=>{
     const result = registerUserSchema.safeParse(req.body)
     
 
@@ -25,11 +25,9 @@ export const registerUser =async (req: Request,res:Response)=>{
       message: "User registered successfully",
       user,
     });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
+  }catch (error) {
+  next(error);
+}
 };
 
 
