@@ -3,6 +3,8 @@ import { useTasks } from "./tasks.queries";
 import TaskFilters from "./TaskFilters";
 import TaskCard from "../dashboard/TaskCard";
 import CreateTaskForm from "./ui/CreateTaskForm";
+import Spinner from "../components/spinner.tsx";
+import EmptyState from "../components/EmptyState.tsx";
 
 export default function TasksPage() {
   const [status, setStatus] = useState<string | undefined>();
@@ -29,12 +31,11 @@ export default function TasksPage() {
         onSortChange={setSort}
       />
 
-      {isLoading && <p>Loading tasks...</p>}
+    {isLoading && <Spinner />}
 
       {!isLoading && data?.tasks.length === 0 && (
-        <p className="text-gray-500">
-          No tasks match the selected filters.
-        </p>
+       <EmptyState message="No tasks match the selected filters." />
+
       )}
 
       <div className="grid gap-4">

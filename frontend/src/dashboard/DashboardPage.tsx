@@ -4,6 +4,8 @@ import {
   useCreatedTasks,
   useOverdueTasks,
 } from "./dashboard.queries";
+import Spinner from "../components/spinner";
+import EmptyState from "../components/EmptyState";
 
 export default function DashboardPage() {
   const {
@@ -31,11 +33,9 @@ export default function DashboardPage() {
           Tasks Assigned to Me
         </h2>
 
-        {assignedLoading && <p>Loading...</p>}
+       {assignedLoading && <Spinner />}
         {!assignedLoading && assigned?.tasks.length === 0 && (
-          <p className="text-gray-500">
-            No tasks assigned to you.
-          </p>
+          <EmptyState message="No tasks assigned to you." />
         )}
 
         <div className="grid gap-4">
@@ -50,8 +50,7 @@ export default function DashboardPage() {
         <h2 className="text-xl font-semibold mb-3">
           Tasks Created by Me
         </h2>
-
-        {createdLoading && <p>Loading...</p>}
+{createdLoading && <Spinner />}
         {!createdLoading && created?.tasks.length === 0 && (
           <p className="text-gray-500">
             You haven’t created any tasks.
@@ -71,7 +70,7 @@ export default function DashboardPage() {
           Overdue Tasks
         </h2>
 
-        {overdueLoading && <p>Loading...</p>}
+        {overdueLoading && <Spinner />}
         {!overdueLoading && overdue?.tasks.length === 0 && (
           <p className="text-gray-500">
             No overdue tasks 🎉

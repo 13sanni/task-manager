@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useCreateTask } from "../tasks.mutations.ts";
+import Button from "../../components/Button.tsx";
 
 interface CreateTaskFormData {
   title: string;
@@ -62,14 +63,14 @@ export default function CreateTaskForm() {
         className="border px-3 py-2 w-full rounded"
       />
 
-      <button
-        type="submit"
-        disabled={createTask.isPending}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        {createTask.isPending ? "Creating..." : "Create"}
-      </button>
-
+     
+<Button
+  type="submit"
+  isLoading={createTask.isPending}
+  className="bg-blue-600 text-white"
+>
+  Create
+</Button>
       {createTask.isError && (
         <p className="text-red-600 text-sm">
           Failed to create task

@@ -2,6 +2,7 @@ import type{ Task } from "../types/task";
 import { useUpdateTask } from "../tasks/tasks.mutations";
 import { useDeleteTask } from "../tasks/tasks.mutations";
 import { useAuth } from "../auth/authContext.tsx";
+import Button from "../components/Button.tsx";
 
 
 export default function TaskCard({ task }: { task: Task }) {
@@ -73,13 +74,14 @@ const handleDelete = () => {
           <option value="Urgent">Urgent</option>
         </select>
         {isCreator && (
-  <button
-    onClick={handleDelete}
-    disabled={deleteTask.isPending}
-    className="text-red-600 text-sm hover:underline"
-  >
-    {deleteTask.isPending ? "Deleting..." : "Delete"}
-  </button>
+  
+<Button
+  onClick={handleDelete}
+  isLoading={deleteTask.isPending}
+  className="text-red-600 text-sm"
+>
+  Delete
+</Button>
 )}
 
       </div>
