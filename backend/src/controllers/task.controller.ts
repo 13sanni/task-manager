@@ -1,5 +1,6 @@
 import type{ Request, Response , NextFunction } from "express";
 import {createTaskSchema,updateTaskSchema,} from "../dtos/task.dto.ts";
+import { TaskStatus, TaskPriority } from "../../generated/prisma/enums.ts";
 import {
   createTaskService,
   updateTaskService,
@@ -7,6 +8,7 @@ import {
   getMyAssignedTasksService,
   getMyCreatedTasksService,
   getMyOverdueTasksService,
+  getMyAssignedTasksFilteredService,
 } from "../services/task.service.ts";
 import type{ AuthenticatedRequest } from "../middleware/auth.middleware.ts";
 import { z } from "zod";
@@ -145,4 +147,30 @@ export const getMyOverdueTasksController = async (
   const tasks = await getMyOverdueTasksService(req.user!.userId);
 
   return res.status(200).json({ tasks });
+};
+
+
+
+export const getMyAssignedTasksFilteredController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { status, priority, sort } = req.query;
+
+    const filterOptions: Record<string, any> = {};
+    if (status) filterOptions.status = status as TaskStatus;
+    if (priority) filterOptions.priority = priority as TaskPriority;
+    if (sort === "dueDate") filterOptions.sort = "dueDate";
+
+    const tasks = await getMyAssignedTasksFilteredService(
+      req.user!.userId,
+      filterOptions
+    );
+
+    res.status(200).json({ tasks });
+  } catch (error) {
+    next(error);
+  }
 };

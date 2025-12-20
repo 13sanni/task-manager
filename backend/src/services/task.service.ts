@@ -1,5 +1,7 @@
 import type{ CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.ts";
 import {NotFoundError,ForbiddenError,} from "../errors/httpErrors.ts";
+import { TaskStatus, TaskPriority } from "../../generated/prisma/enums.ts";
+import { getTasksWithFilters } from "../repositories/task.repository.ts";
 import {
   createTask, 
   findTaskById,
@@ -89,4 +91,43 @@ export const getMyOverdueTasksService = async (
   userId: string
 ) => {
   return getOverdueTasks(userId);
+};
+
+
+
+interface TaskFilterOptions {
+   status?: TaskStatus;
+   priority?: TaskPriority;
+    sort?: "dueDate"; }
+
+
+
+export const getMyAssignedTasksFilteredService = async (
+  userId: string,
+  filters: TaskFilterOptions
+) => {
+  const queryOptions: any = {};
+  if (filters.status !== undefined) queryOptions.status = filters.status;
+  if (filters.priority !== undefined) queryOptions.priority = filters.priority;
+  if (filters.sort) queryOptions.sortByDueDate = "asc";
+
+  return getTasksWithFilters(
+    { assignedToId: userId },
+    queryOptions
+  );
+};
+
+export const getMyCreatedTasksFilteredService = async (
+  userId: string,
+  filters: TaskFilterOptions
+) => {
+  const queryOptions: any = {};
+  if (filters.status !== undefined) queryOptions.status = filters.status;
+  if (filters.priority !== undefined) queryOptions.priority = filters.priority;
+  if (filters.sort) queryOptions.sortByDueDate = "asc";
+
+  return getTasksWithFilters(
+    { creatorId: userId },
+    queryOptions
+  );
 };

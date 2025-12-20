@@ -89,3 +89,28 @@ export const getOverdueTasks = async (userId: string) => {
     orderBy: { dueDate: "asc" },
   });
 };
+
+
+interface TaskQueryOptions {
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  sortByDueDate?: "asc" | "desc";
+}
+
+
+ //task query builder
+ export const getTasksWithFilters = async (
+  where: Record<string, any>,
+  options: TaskQueryOptions = {}
+) => {
+  return prisma.task.findMany({
+    where: {
+      ...where,
+      ...(options.status && { status: options.status }),
+      ...(options.priority && { priority: options.priority }),
+    },
+    ...(options.sortByDueDate && {
+      orderBy: { dueDate: options.sortByDueDate },
+    }),
+  });
+};
