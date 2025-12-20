@@ -1,4 +1,9 @@
+import LoginForm from "../auth/ui/LoginForm";
 
 export default function Login() {
-  return <h1>Login Page</h1>;
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <LoginForm />
+    </div>
+  );
 }

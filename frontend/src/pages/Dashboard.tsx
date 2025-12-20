@@ -1,3 +1,5 @@
+import DashboardPage from "../dashboard/DashboardPage";
+
 export default function Dashboard() {
-  return <h1>Dashboard (Protected)</h1>;
+  return <DashboardPage />;
 }
