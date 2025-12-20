@@ -47,3 +47,19 @@ export const createTaskApi = async (
   const res = await axios.post("/tasks", data);
   return res.data;
 };
+export interface UpdateTaskPayload {
+  status?: string;
+  priority?: string;
+}
+
+export const updateTaskApi = async (
+  taskId: string,
+  data: UpdateTaskPayload
+) => {
+  const res = await axios.patch(`/tasks/${taskId}`, data);
+  return res.data;
+};
+export const deleteTaskApi = async (taskId: string) => {
+  const res = await axios.delete(`/tasks/${taskId}`);
+  return res.data;
+};
