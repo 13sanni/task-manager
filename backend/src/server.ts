@@ -1,8 +1,8 @@
 import app from "./app.ts";
-const port = Number(process.env.PORT);
+const PORT = Number(process.env.PORT);
 import { prisma } from "./lib/prisma.ts";
-
-
+import { initSocket } from "./socket";
+import http from "http";
 async function connectToDatabase() {
   try {
     await prisma.$connect();
@@ -16,6 +16,9 @@ async function connectToDatabase() {
 // Connect to the database in the background
 connectToDatabase();
 
-app.listen(port, () => {
-  console.log("Backend is running")
-})
+const server = http.createServer(app);
+initSocket(server);
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

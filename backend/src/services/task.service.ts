@@ -2,6 +2,8 @@ import type{ CreateTaskDto, UpdateTaskDto } from "../dtos/task.dto.ts";
 import {NotFoundError,ForbiddenError,} from "../errors/httpErrors.ts";
 import { TaskStatus, TaskPriority } from "../../generated/prisma/enums.ts";
 import { getTasksWithFilters } from "../repositories/task.repository.ts";
+import { getIO } from "../socket";
+
 import {
   createTask, 
   findTaskById,
