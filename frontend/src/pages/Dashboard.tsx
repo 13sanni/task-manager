@@ -1,10 +1,12 @@
-import DashboardPage from "../dashboard/DashboardPage";
-import Navbar from "../components/NavBar";
+import React from 'react'
 
-export default function Dashboard() {
+const Dashboard = () => {
   return (
-  <>
-  <Navbar/>;
-  <DashboardPage />;
-  </>)
+    <div>
+        <h1 className='border-2 border-amber-500'>Dashboard</h1>
+      
+    </div>
+  )
 }
+
+export default Dashboard

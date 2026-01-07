@@ -1,9 +1,17 @@
-import LoginForm from "../auth/ui/LoginForm";
+import React from 'react'
 
-export default function Login() {
+const Login = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <LoginForm />
+    <div>
+
+      <div>
+        <div> <input type="email" placeholder='enter your email' /></div>
+        <div> <input type="password" placeholder='enter your password' /></div>
+      
+      </div>
+
     </div>
-  );
+  )
 }
+
+export default Login

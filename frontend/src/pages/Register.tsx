@@ -1,9 +1,11 @@
-import RegisterForm from "../auth/ui/RegisterForm";
+import React from 'react'
 
-export default function Register() {
+const Register = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <RegisterForm />
+    <div>
+      <h1>REGISTER</h1>
     </div>
-  );
+  )
 }
+
+export default Register
