@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../axios";
-
+import { Link } from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,6 +64,7 @@ const Register = () => {
               Register
             </button>
           </form>
+              <p className=' ml-20 mt-3'>Do not have an account? <Link to="/login" className='text-blue-400 font-bold'>Sign In</Link></p>
         </div>
 
         {/* Right: Illustration Section */}
