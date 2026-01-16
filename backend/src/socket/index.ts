@@ -1,8 +1,7 @@
 import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
-import { socketAuthMiddleware } from "./auth";
-import { AuthenticatedSocket } from "./types";
-
+import socketAuthMiddleware from "./auth.ts";
+import type AuthenticatedSocket from "./types.ts";
 let io: Server;
 
 export const initSocket = (httpServer: HttpServer) => {

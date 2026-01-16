@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
-import { AuthenticatedSocket } from "./types";
+import type AuthenticatedSocket  from "./types.ts";
 
 interface JwtPayload {
   userId: string;
@@ -35,3 +35,4 @@ export const socketAuthMiddleware = (
     next(new Error("Invalid or expired token"));
   }
 };
+export default socketAuthMiddleware;

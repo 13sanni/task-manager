@@ -1,8 +1,9 @@
 import app from "./app.ts";
 const PORT = Number(process.env.PORT);
 import { prisma } from "./lib/prisma.ts";
-import { initSocket } from "./socket";
+import { initSocket } from "./socket/index.ts";
 import http from "http";
+
 async function connectToDatabase() {
   try {
     await prisma.$connect();

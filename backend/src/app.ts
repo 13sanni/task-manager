@@ -5,8 +5,13 @@ import testRouter from "./routes/testingRoute.ts";
 import authRouter from "./routes/auth.routes.ts";
 import taskRouter from "./routes/task.routes.ts"
 import { globalErrorHandler } from "./middleware/error.middleware.ts";
-const app = express();
+import cors from "cors";
 
+const app = express();
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 /* middleware */
 app.use(express.json());
 app.use(cookieParser());
