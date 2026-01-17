@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {NotFoundError,UnauthorizedError,BadRequestError} from "../errors/httpErrors.ts";
+import {UnauthorizedError,BadRequestError} from "../errors/httpErrors.ts";
 import type { LoginUserDto, RegisterUserDto , UpdateProfileDto ,ChangePasswordDto} from "../dtos/auth.dto.ts";
 import {findUserByEmail,createUser,updateUserProfile,updateUserPassword,findUserById} from "../repositories/user.repository.ts";
 import { prisma } from "../lib/prisma.ts";
